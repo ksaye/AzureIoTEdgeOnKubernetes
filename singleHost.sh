@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+echo "Parameters Passed:"
+echo "krbuser=$ksaye"
+echo "DEBIAN_FRONTEND=n$DEBIAN_FRONTEND"
+echo "constr=$constr"
+
 echo "Installing the pre requisites"
 sudo apt update 
 sudo apt install -y k3d unzip tree jq curl wget </dev/null
@@ -34,6 +40,7 @@ sleep 3
 done
 
 echo "Download and bootstrap k3d cluster"
+sudo k3d delete -n k3s1
 wget -q -O - https://raw.githubusercontent.com/rancher/k3d/master/install.sh | TAG=v1.6.0 bash
 sudo k3d create -n k3s1 -w 1 --image rancher/k3s:v1.17.2-k3s1 --server-arg \"--no-deploy=traefik\"
 
