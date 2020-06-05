@@ -55,5 +55,5 @@ sleep 15
 echo "Install IoT Edge and your Connection String"
 sudo kubectl create ns iotedge --kubeconfig=/home/$krbuser/.kube/config
 sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/home/$krbuser/.kube/config
-echo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set 'provisioning.deviceConnectionString=$constr'
-sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set 'provisioning.deviceConnectionString=$constr'
+echo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set provisioning.deviceConnectionString=$constr
+sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set provisioning.deviceConnectionString=$constr
