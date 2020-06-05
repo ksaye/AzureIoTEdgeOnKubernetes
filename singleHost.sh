@@ -2,13 +2,13 @@
 
 echo "Parameters Passed:"
 echo "  krbuser=$krbuser"
-echo "  DEBIAN_FRONTEND=$DEBIAN_FRONTEND"
 echo "  constr=$constr"
+
 export constr=$constr
-export DEBIAN_FRONTEND=$DEBIAN_FRONTEND
+export DEBIAN_FRONTEND=noninteractive
 export krbuser=$krbuser
 
-echo "Installing the pre requisites"
+echo "Installing the Prerequisites"
 sudo apt update 
 sudo apt install -y k3d unzip tree jq curl wget </dev/null
 
@@ -58,5 +58,6 @@ sleep 15
 echo "Install IoT Edge and your Connection String"
 sudo kubectl create ns iotedge --kubeconfig=/home/$krbuser/.kube/config
 sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/home/$krbuser/.kube/config
-echo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set provisioning.deviceConnectionString=$constr
 sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set provisioning.deviceConnectionString=$constr
+echo 'Done! you can see the status by running:'
+echo '  kubectl get pods -n iotedge --kubeconfig=/home/$krbuser/.kube/config'
