@@ -2,8 +2,11 @@
 
 echo "Parameters Passed:"
 echo "  krbuser=$krbuser"
-echo "  DEBIAN_FRONTEND=n$DEBIAN_FRONTEND"
+echo "  DEBIAN_FRONTEND=$DEBIAN_FRONTEND"
 echo "  constr=$constr"
+export constr=$constr
+export DEBIAN_FRONTEND=$DEBIAN_FRONTEND
+export krbuser=$krbuser
 
 echo "Installing the pre requisites"
 sudo apt update 
