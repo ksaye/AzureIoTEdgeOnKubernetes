@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
 echo "Parameters Passed:"
-echo "  krbuser=$krbuser"
+echo "  kubuser=$kubuser"
 echo "  constr=$constr"
 
 export constr=$constr
 export DEBIAN_FRONTEND=noninteractive
-export krbuser=$krbuser
+export kubuser=$kubuser
 
 echo "Installing the Prerequisites"
 sudo apt update 
@@ -50,14 +50,17 @@ sudo k3d create -n k3s1 -w 1 --image rancher/k3s:v1.17.2-k3s1 --server-arg \"--n
 sleep 30
 
 echo "Set default KUBECONFIG"
-mkdir /home/$krbuser/.kube
-cat $(sudo k3d get-kubeconfig --name=''k3s1'') > /home/$krbuser/.kube/config
+mkdir /home/$kubuser/.kube
+cat $(sudo k3d get-kubeconfig --name=''k3s1'') > /home/$kubuser/.kube/config
 
 sleep 15
 
 echo "Install IoT Edge and your Connection String"
-sudo kubectl create ns iotedge --kubeconfig=/home/$krbuser/.kube/config
-sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/home/$krbuser/.kube/config
-sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$krbuser/.kube/config --set provisioning.deviceConnectionString=$constr
-echo 'Done! you can see the status by running:'
-echo '  kubectl get pods -n iotedge --kubeconfig=/home/$krbuser/.kube/config'
+sudo kubectl create ns iotedge --kubeconfig=/home/$kubuser/.kube/config
+sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/home/$kubuser/.kube/config
+sudo helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/home/$kubuser/.kube/config --set provisioning.deviceConnectionString=$constr
+echo Done! you can see the status by running:
+echo   kubectl get pods -n iotedge --kubeconfig=/home/$kubuser/.kube/config
+
+k9s -n iotedge --kubeconfig=/home/$kubuser/.kube/config
+
