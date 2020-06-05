@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Parameters Passed:"
-echo "krbuser=$ksaye"
+echo "krbuser=$krbuser"
 echo "DEBIAN_FRONTEND=n$DEBIAN_FRONTEND"
 echo "constr=$constr"
 
