@@ -58,15 +58,15 @@ clear
 echo
 echo
 
-echo Done! you can see the status by running the following command, once you have worker nodes:
-echo   kubectl get pods -n iotedge --kubeconfig=/etc/kubernetes/admin.conf
+echo "Done! you can see the status by running the following command, once you have worker nodes:"
+echo "   kubectl get pods -n iotedge --kubeconfig=/etc/kubernetes/admin.conf"
 
-echo To see the visual UI, run:
-echo   k9s -n iotedge --kubeconfig=/etc/kubernetes/admin.conf
+echo "To see the visual UI, run:"
+echo "   sudo k9s -n iotedge --kubeconfig=/etc/kubernetes/admin.conf"
 echo
 echo
-echo on a worker node, run the following to install Kubernetes:
-echo   wget -q -O - https://raw.githubusercontent.com/ksaye/AzureIoTEdgeOnKubernetes/master/workerNode.sh | sudo bash
+echo "on a worker node, run the following to install Kubernetes:"
+echo "   wget -q -O - https://raw.githubusercontent.com/ksaye/AzureIoTEdgeOnKubernetes/master/workerNode.sh | sudo bash"
 echo
-echo and then run the following command to join this cluster:
-echo   kubeadm join $IPAddress:6443 --token $token --discover-token-ca-cert-hash sha256:$tokenHash
+echo "then run the following command to join this cluster:"
+echo "   sudo kubeadm join $IPAddress:6443 --token $token --discover-token-ca-cert-hash sha256:$tokenHash --ignore-preflight-errors=all"
