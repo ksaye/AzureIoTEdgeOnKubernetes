@@ -46,9 +46,9 @@ done
 echo "Install IoT Edge and your Connection String"
 kubectl delete ns iotedge --kubeconfig=/etc/kubernetes/admin.conf
 kubectl create ns iotedge --kubeconfig=/etc/kubernetes/admin.conf
-kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml --kubeconfig=/etc/kubernetes/admin.conf
-helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/etc/kubernetes/admin.conf
-helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/etc/kubernetes/admin.conf --set provisioning.deviceConnectionString=$constr
+#kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml --kubeconfig=/etc/kubernetes/admin.conf
+#helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/etc/kubernetes/admin.conf
+#helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/etc/kubernetes/admin.conf --set provisioning.deviceConnectionString=$constr
 
 export tokenHash=$(openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //')
 export token=$(kubeadm token list -o json | jq -r .token)
