@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-echo "Setting up a Kubernetes Master Host"
+echo "Setting up a Kubernetes Worker Node"
 export DEBIAN_FRONTEND=noninteractive
 
 echo "Installing the Prerequisites"
