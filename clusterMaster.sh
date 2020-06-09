@@ -65,4 +65,4 @@ echo "on a worker node, run the following to install Kubernetes:"
 echo "   wget -q -O - https://raw.githubusercontent.com/ksaye/AzureIoTEdgeOnKubernetes/master/workerNode.sh | sudo bash"
 echo
 echo "then run the following command to join this cluster:"
-echo "   sudo kubeadm join $IPAddress:6443 --token $token --discover-token-ca-cert-hash sha256:$tokenHash --ignore-preflight-errors=all"
+echo "   sudo kubeadm join $IPAddress:6443 --token $token --discovery-token-ca-cert-hash sha256:$tokenHash --ignore-preflight-errors=all"
