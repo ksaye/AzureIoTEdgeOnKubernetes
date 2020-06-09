@@ -7,25 +7,26 @@ echo "  constr=$constr"
 export constr=$constr
 export DEBIAN_FRONTEND=noninteractive
 
-echo "adding the repositories"
+echo "Installing the Prerequisites"
+sudo apt update 
+sudo apt install -y unzip tree apt-transport-https jq curl wget </dev/null
+
+echo "Installing Moby from Microsoft"
+sudo curl https://packages.microsoft.com/config/ubuntu/18.04/multiarch/prod.list > ./microsoft-prod.list
+sudo cp ./microsoft-prod.list /etc/apt/sources.list.d/
+sudo curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo cp ./microsoft.gpg /etc/apt/trusted.gpg.d/
+sudo apt-get update 
+sudo apt-get install -y moby-engine moby-cli </dev/null
+
+echo "Installing Kubernetes"
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 apt-add-repository "deb https://apt.kubernetes.io/ kubernetes-xenial main"
-curl https://packages.microsoft.com/config/ubuntu/18.04/multiarch/prod.list > ./microsoft-prod.list
-sudo cp ./microsoft-prod.list /etc/apt/sources.list.d/
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-sudo cp ./microsoft.gpg /etc/apt/trusted.gpg.d/
-
-sleep 5
-
-sudo apt-get update 
-echo "Installing the Prerequisites"
-sudo apt install -y unzip tree apt-transport-https jq moby-engine moby-cli kubeadm </dev/null
 swapoff -a
 sed -i -e '/swap.img/d' /etc/fstab
-
-echo "Configuring Kubernetes"
+apt-get install kubeadm -y </dev/null
 kubeadm init --pod-network-cidr=172.29.0.0/24 --ignore-preflight-errors=all
-kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml  --kubeconfig=/etc/kubernetes/admin.conf
+kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml --kubeconfig=/etc/kubernetes/admin.conf
 
 echo "Install K9s (visual cluster explorer)"
 wget https://github.com/derailed/k9s/releases/download/v0.15.2/k9s_Linux_x86_64.tar.gz
@@ -64,4 +65,4 @@ echo "on a worker node, run the following to install Kubernetes:"
 echo "   wget -q -O - https://raw.githubusercontent.com/ksaye/AzureIoTEdgeOnKubernetes/master/workerNode.sh | sudo bash"
 echo
 echo "then run the following command to join this cluster:"
-echo "   sudo kubeadm join $IPAddress:6443 --token $token --discovery-token-ca-cert-hash sha256:$tokenHash --ignore-preflight-errors=all"
+echo "   sudo kubeadm join $IPAddress:6443 --token $token --discover-token-ca-cert-hash sha256:$tokenHash --ignore-preflight-errors=all"
