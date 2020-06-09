@@ -23,6 +23,7 @@ echo "Installing Kubernetes"
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 apt-add-repository "deb https://apt.kubernetes.io/ kubernetes-xenial main"
 swapoff -a
+sed -i -e '/swap.img/d' /etc/fstab
 apt-get install kubeadm -y </dev/null
 kubeadm init --pod-network-cidr=172.29.0.0/24 --ignore-preflight-errors=all
 
