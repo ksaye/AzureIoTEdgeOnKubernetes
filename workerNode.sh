@@ -11,10 +11,11 @@ sudo cp ./microsoft-prod.list /etc/apt/sources.list.d/
 curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 sudo cp ./microsoft.gpg /etc/apt/trusted.gpg.d/
 
+sleep 5
+
 echo "Installing the Prerequisites"
 sudo apt update 
 sudo apt install -y unzip tree apt-transport-https jq moby-engine moby-cli kubeadm </dev/null
-systemctl enable docker.service
 
 swapoff -a
 sed -i -e '/swap.img/d' /etc/fstab
