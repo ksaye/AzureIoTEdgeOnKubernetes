@@ -21,9 +21,8 @@ sudo apt install -y unzip tree apt-transport-https jq moby-engine moby-cli kubea
 swapoff -a
 sed -i -e '/swap.img/d' /etc/fstab
 
-echo "Installing Kubernetes"
-apt-get install kubeadm -y </dev/null
-kubeadm init --pod-network-cidr=172.29.0.0/24
+echo "Configuring Kubernetes"
+kubeadm init --pod-network-cidr=172.29.0.0/24 --ignore-preflight-errors=all
 kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml  --kubeconfig=/etc/kubernetes/admin.conf
 
 echo "Install K9s (visual cluster explorer)"
@@ -63,4 +62,4 @@ echo "on a worker node, run the following to install Kubernetes:"
 echo "   wget -q -O - https://raw.githubusercontent.com/ksaye/AzureIoTEdgeOnKubernetes/master/workerNode.sh | sudo bash"
 echo
 echo "then run the following command to join this cluster:"
-echo "   sudo kubeadm join $IPAddress:6443 --token $token --discovery-token-ca-cert-hash sha256:$tokenHash"
+echo "   sudo kubeadm join $IPAddress:6443 --token $token --discovery-token-ca-cert-hash sha256:$tokenHash --ignore-preflight-errors=all"
