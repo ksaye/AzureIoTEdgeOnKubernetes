@@ -7,18 +7,24 @@ echo "  constr=$constr"
 export constr=$constr
 export DEBIAN_FRONTEND=noninteractive
 
-echo "Installing the Prerequisites"
-sudo apt update 
-sudo apt install -y unzip tree apt-transport-https jq curl wget docker.io </dev/null
-systemctl enable docker.service
-
-echo "Installing Kubernetes"
+echo "adding the repositories"
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add
 apt-add-repository "deb https://apt.kubernetes.io/ kubernetes-xenial main"
+curl https://packages.microsoft.com/config/ubuntu/18.04/multiarch/prod.list > ./microsoft-prod.list
+sudo cp ./microsoft-prod.list /etc/apt/sources.list.d/
+curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+sudo cp ./microsoft.gpg /etc/apt/trusted.gpg.d/
+
+sudo apt-get update 
+echo "Installing the Prerequisites"
+sudo apt install -y unzip tree apt-transport-https jq moby-engine moby-cli kubeadm </dev/null
 swapoff -a
 sed -i -e '/swap.img/d' /etc/fstab
+
+echo "Installing Kubernetes"
 apt-get install kubeadm -y </dev/null
 kubeadm init --pod-network-cidr=172.29.0.0/24
+kubectl apply -f https://docs.projectcalico.org/v3.14/manifests/calico.yaml  --kubeconfig=/etc/kubernetes/admin.conf
 
 echo "Install K9s (visual cluster explorer)"
 wget https://github.com/derailed/k9s/releases/download/v0.15.2/k9s_Linux_x86_64.tar.gz
@@ -35,7 +41,6 @@ rm -rf helm-v3.1.0-linux-amd64.tar.gz ./linux-amd64/
 echo "Install IoT Edge and your Connection String"
 kubectl delete ns iotedge --kubeconfig=/etc/kubernetes/admin.conf
 kubectl create ns iotedge --kubeconfig=/etc/kubernetes/admin.conf
-#kubectl apply -f https://raw.githubusercontent.com/coreos/flannel/master/Documentation/kube-flannel.yml --kubeconfig=/etc/kubernetes/admin.conf
 helm install --repo https://edgek8s.blob.core.windows.net/staging edge-crd edge-kubernetes-crd --kubeconfig=/etc/kubernetes/admin.conf
 helm install --repo https://edgek8s.blob.core.windows.net/staging edge edge-kubernetes --namespace iotedge --kubeconfig=/etc/kubernetes/admin.conf --set provisioning.deviceConnectionString=$constr
 
